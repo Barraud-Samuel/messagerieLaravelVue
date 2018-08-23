@@ -29,9 +29,9 @@ class ConversationRepository {
         ]);
     }
 
-    public function getMessagesFor(int $from,int $to):\Illuminate\Database\Eloquent\Builder {
+    public function getMessagesFor(int $from,int $to): \Illuminate\Database\Eloquent\Builder {
         return $this->message->newQuery()
-            ->newQuery("((from_id = $from AND to_id = $to) OR (from_id = $to AND to_id = $from))")
+            ->whereraw("((from_id = $from AND to_id = $to) OR (from_id = $to AND to_id = $from))")
             ->orderBy('created_at', 'DESC');
     }
 }

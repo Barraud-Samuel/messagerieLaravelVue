@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreMessage;
 use App\Repository\ConversationRepository;
 use App\User;
 use Illuminate\Auth\AuthManager;
@@ -30,11 +31,11 @@ class ConversationsController extends Controller
         return view('conversations.show',[
             'users' => $this->r->getConversations($this->auth->user()->id),
             'user' => $user,
-            'messages' => $this->r->getMessagesFor($this->auth->user()->id,$user->id)->get()
+            'messages' => $this->r->getMessagesFor($this->auth->user()->id,$user->id)->paginate(50)
         ]);
     }
 
-    public function store (User $user, Request $request) {
+    public function store (User $user, StoreMessage $request) {
         $this->r->createMessage(
             $request->get('content'),
             $this->auth->user()->id,
