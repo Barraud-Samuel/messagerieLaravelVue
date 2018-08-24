@@ -23,7 +23,8 @@ class ConversationsController extends Controller
 
     public function index () {
         return view('conversations.index',[
-            'users' => $this->r->getConversations($this->auth->user()->id)
+            'users' => $this->r->getConversations($this->auth->user()->id),
+            'unread' => $this->r->unreadCount($this->auth->user()->id)
         ]);
     }
 
@@ -31,7 +32,8 @@ class ConversationsController extends Controller
         return view('conversations.show',[
             'users' => $this->r->getConversations($this->auth->user()->id),
             'user' => $user,
-            'messages' => $this->r->getMessagesFor($this->auth->user()->id,$user->id)->paginate(50)
+            'messages' => $this->r->getMessagesFor($this->auth->user()->id,$user->id)->paginate(50),
+            'unread' => $this->r->unreadCount($this->auth->user()->id)
         ]);
     }
 

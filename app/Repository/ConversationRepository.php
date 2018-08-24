@@ -22,15 +22,6 @@ class ConversationRepository {
             ->select('name','id')
             ->where('id','!=', $userId)
             ->get();
-
-        $unread = $this->unreadCount($userId);
-        foreach ($conversations as $conversation) {
-            if (isset($unread[$conversation->id])) {
-                $conversation->unread = $unread[$conversation->id];
-            }else{
-                $conversation->unread = 0;
-            }
-        }
         return $conversations;
     }
 
@@ -62,7 +53,7 @@ class ConversationRepository {
      * @param int $userId
      * @return \Illuminate\Support\Collection|static
      */
-    private function unreadCount (int $userId) {
+    public function unreadCount (int $userId) {
         return $this->message->newQuery()
             ->where('to_id', $userId)
             ->groupBy('from_id')
