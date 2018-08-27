@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreMessage;
+use App\Notifications\MessageReceived;
 use App\Repository\ConversationRepository;
 use App\User;
 use Illuminate\Auth\AuthManager;
@@ -29,20 +30,29 @@ class ConversationsController extends Controller
     }
 
     public function show (User $user) {
+        $me = $this->auth->user();
+        $messages = $this->r->getMessagesFor($me->id,$user->id)->paginate(50);
+        $unread = $this->r->unreadCount($me->id);
+        if (isset($unread[$user->id])) {
+            $this->r->readAllFrom($user->id, $me->id);
+            unset($unread[$user->id]);
+        }
         return view('conversations.show',[
             'users' => $this->r->getConversations($this->auth->user()->id),
             'user' => $user,
-            'messages' => $this->r->getMessagesFor($this->auth->user()->id,$user->id)->paginate(50),
-            'unread' => $this->r->unreadCount($this->auth->user()->id)
+            'messages' => $messages,
+            'unread' => $unread
         ]);
     }
 
     public function store (User $user, StoreMessage $request) {
-        $this->r->createMessage(
+        $message = $this->r->createMessage(
             $request->get('content'),
             $this->auth->user()->id,
             $user->id
         );
+
+        $user->notify(new MessageReceived($message));
         return redirect(route('conversations.show',['id'=>$user->id]));
     }
 }

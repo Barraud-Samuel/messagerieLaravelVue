@@ -15,7 +15,7 @@
                                 <a href="{{$messages->nextPageUrl()}}" class="btn btn-light">Voir les messages précédents</a>
                             </div>
                         @endif
-                        @foreach($messages as $message)
+                        @foreach(array_reverse($messages->items()) as $message)
                             <div class="row">
                                 <div class="col-lg-10 {{$message->from->id !== $user->id ? 'offset-md-2 text-right' : ''}}">
                                     <p>

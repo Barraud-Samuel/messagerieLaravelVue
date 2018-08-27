@@ -62,4 +62,13 @@ class ConversationRepository {
             ->get()
             ->pluck('count', 'from_id');
     }
+
+
+    /**
+     *  Marque tous les messages de cet utilisateur comme lu
+     * @param $id
+     */
+    Public function readAllFrom(int $from, int $to) {
+        $this->message->where('from_id',$from)->where('to_id', $to)->update(['read_at' => Carbon::now()]);
+    }
 }
