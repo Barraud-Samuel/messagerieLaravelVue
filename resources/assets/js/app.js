@@ -5,9 +5,9 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
+/*require('./bootstrap');
 
-//window.Vue = require('vue');
+window.Vue = require('vue');*/
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -22,13 +22,33 @@ const app = new Vue({
     el: '#app'
 });
 */
-console.log(document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
 
+
+
+
+import Vue from 'vue';
+import Messagerie from './components/MessagerieComponent';
+import store from './store/store';
+
+
+
+new Vue({
+    el: '#messagerie',
+    components: { Messagerie },
+    store
+});
+
+
+
+
+
+/*
 fetch('/api/user', {
     headers: {
         'X-Requested-With': 'XMLHttpRequest',
         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     }
 });
+*/
 
 //TODO 11:28 min
